@@ -17,7 +17,12 @@ track_result = ""
 head = 0
 jumlah_track = 0
 
-st.title("Disk Scheduling Simulator")
+st.write("Biodata Pembuat")
+st.write("Nama: M. Fatur Maulidan Azzahra")
+st.write("NIM: 10124907")
+st.write("Mata Kuliah: Sistem Operasi")
+
+st.header("Disk Scheduling")
 
 head = st.number_input(
     "Masukkan Nilai Head",
