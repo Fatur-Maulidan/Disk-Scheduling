@@ -10,9 +10,10 @@ import os
 """
 
 # track = [98, 183, 37, 122, 14, 124, 65, 67, 80, 120]
+# track = [55, 58, 39, 18, 90, 160, 150, 38, 184]
 track = []
 head = 0
-jumlah_track = 10
+jumlah_track = 9
 track_result = ""
 nama_metode = ""
 
@@ -41,83 +42,104 @@ def menu():
     return pilihan
 
 def checkMetode(metode):
-    global nama_metode
     os.system('cls')
     if metode == 1:
-        nama_metode = "FIFO (First In First Out)"
         FIFO()
     elif metode == 2:
-        nama_metode = "LIFO (Last In First Out)"
         LIFO()
     elif metode == 3:
-        nama_metode = "SSTF (Shortest Seek Time First)"
         SSTF()
     elif metode == 4:
-        nama_metode = "SCAN"
         SCAN()
     elif metode == 5:
-        nama_metode = "C-SCAN"
         CSCAN()
     elif metode == 6:
         print("Hasil Semua Metode")
-        print(f"Metode FIFO: ", FIFO())
-        print(f"Metode LIFO: ", LIFO())
-        print(f"Metode SSTF: ", SSTF())
-        print(f"Metode SCAN: ", SCAN())
-        print(f"Metode C-SCAN: ", CSCAN())
+        FIFO()
+        LIFO()
+        SSTF()
+        SCAN()
+        CSCAN()
     else:
         print(f"Metode yang dipilih tidak ada \n")
         checkMetode()
 
 # Metode First In First Out
 def FIFO():
-    global track_result
+    global track_result, head
     track_result_fifo = track_result
+    traversed_track_result = []
+    
     for i in range(jumlah_track):
         track_result_fifo += str(track[i]) + " -> " if i != jumlah_track - 1 else str(track[i])
-        
-    return track_result_fifo
+        if i == 0:
+            traversed_track_result.append(abs(head - track[i]))
+        else :
+            traversed_track_result.append(abs(track[i] - track[i-1]))
+            
+    printData(track_result_fifo, traversed_track_result, "FIFO")
 
 def LIFO():
     global track_result
     track_result_lifo = track_result
+    traversed_track_result = []
+    
     for i in range(jumlah_track - 1, -1, -1):
         track_result_lifo += str(track[i]) + " -> " if i != 0 else str(track[i])
-
-    return track_result_lifo
+        if i == jumlah_track - 1:
+            traversed_track_result.append(abs(head - track[i]))
+        else:
+            traversed_track_result.append(abs(track[i] - track[i+1]))
+            
+    printData(track_result_lifo, traversed_track_result, "LIFO")
 
 def SSTF():
     global track_result, track
     track_result_sstf = track_result 
+    traversed_track_result = []
     
     track_temp = sortTrackForSSTF(sorted(track), head)
     
     for i in range(jumlah_track):
         track_result_sstf += str(track_temp[i]) + " -> " if i != jumlah_track - 1 else str(track_temp[i])
-        
-    return track_result_sstf
+        if i == 0:
+            traversed_track_result.append(abs(head - track_temp[i]))
+        else:
+            traversed_track_result.append(abs(track_temp[i] - track_temp[i-1]))
+    
+    printData(track_result_sstf, traversed_track_result, "SSTF")
     
 def SCAN():
     global track_result, track
     track_result_scan = track_result
+    traversed_track_result = []
     
     track_temp = sortTrackForSCAN(sorted(track), head)
     
     for i in range(jumlah_track):
         track_result_scan += str(track_temp[i]) + " -> " if i != jumlah_track - 1 else str(track_temp[i])
-    
-    return track_result_scan
+        if i == 0:
+            traversed_track_result.append(abs(head - track_temp[i]))
+        else:
+            traversed_track_result.append(abs(track_temp[i] - track_temp[i-1]))
+        
+    printData(track_result_scan, traversed_track_result, "SCAN")
     
 def CSCAN():
     global track_result, track
     track_result_cscan = track_result
+    traversed_track_result = []
     
     track_temp = sortTrackForCSCAN(sorted(track), head)
     
     for i in range(jumlah_track):
         track_result_cscan += str(track_temp[i]) + " -> " if i != jumlah_track - 1 else str(track_temp[i])
+        if i == 0:
+            traversed_track_result.append(abs(head - track_temp[i]))
+        else:
+            traversed_track_result.append(abs(track_temp[i] - track_temp[i-1]))
 
-    return track_result_cscan
+    printData(track_result_cscan, traversed_track_result, "C-SCAN")
 
 def sortTrackForSSTF(track, head):
     track_temp = []
@@ -163,11 +185,16 @@ def sortTrackForCSCAN(track, head):
             track_temp.append(track[i])
             
     return track_temp
-    
+
+def printData(track_result, traversed_result, nama_metode):
+    global head, track, jumlah_track
+    print(f"Metode yang digunakan: ", nama_metode)
+    print(f"Posisi Head: ", head)
+    print(f"Nilai Dari Track: ", track)
+    print(f"Jumlah Track: ", jumlah_track)
+    print(f"Track Result: ", track_result)
+    print(f"Traversed Result: ", traversed_result)
+    print(f"Sum Dari Traversed Result: ", sum(traversed_result))
+    print(f"Average Dari Traversed Result: {sum(traversed_result) / len(traversed_result):.2f} \n")
     
 main()
-print("Posisi Head: ", head)
-print("Nilai Dari Track: ", track)
-print("Jumlah Track: ", jumlah_track)
-print("Metode yang digunakan: ", nama_metode)
-print("Track Result: ", track_result)
