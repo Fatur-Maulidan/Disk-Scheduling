@@ -7,9 +7,7 @@
     untuk memindahkan kepala baca/tulis merupakan faktor utama dalam performa disk.
 """
 
-import streamlit as st # type: ignore
-import matplotlib.pyplot as plt # type: ignore
-import numpy as np # type: ignore
+import streamlit as st
 
 from metode import *
 from helper import *

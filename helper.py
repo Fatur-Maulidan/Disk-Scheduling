@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt # type: ignore
-import pandas as pd # type: ignore
+import matplotlib.pyplot as plt
+import pandas as pd
 
 def handleRangeInput(input):
     if 0 <= input <= 200:
